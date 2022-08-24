@@ -17,3 +17,23 @@ WHERE Sold = (
     SELECT MAX(Sold)
     FROM TopTrack
 );
+
+-- 🎣🎣 trying other date format🦦🦦
+
+WITH TopTrack AS (
+    SELECT 
+        t.Name AS TrackName,
+        COUNT(il.InvoiceLineId) AS Sold
+    FROM InvoiceLine il
+    JOIN Invoice i ON i.InvoiceId = il.InvoiceId
+    JOIN Track t ON t.TrackId = il.TrackId
+    WHERE strftime("%Y", InvoiceDate) = "2013"
+    GROUP BY t.Name
+)
+SELECT 
+    TrackName
+FROM TopTrack
+WHERE Sold = (
+    SELECT MAX(Sold)
+    FROM TopTrack
+);

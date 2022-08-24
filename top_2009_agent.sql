@@ -27,3 +27,25 @@ GROUP BY e.EmployeeId
 ORDER BY TotalSales DESC
 LIMIT 1;
 
+-- 🎣🎣 trying other date format and differnt way🦦🦦
+
+WITH TopAgent AS (
+    SELECT
+        e.FirstName||' '||e.LastName EmployeeFullName,
+        SUM (i.Total) as TotalSales
+        FROM Employee e
+        LEFT JOIN Customer c ON c.SupportRepId = e.EmployeeId
+        JOIN Invoice i ON i.CustomerId = c.CustomerId
+        WHERE strftime('%Y', i.InvoiceDate) = "2009"
+        GROUP BY e.EmployeeId
+    )
+
+SELECT 
+    EmployeeFullName
+FROM TopAgent
+WHERE TotalSales = (
+    SELECT
+        MAX(TotalSales)
+    FROM TopAgent
+)
+
